@@ -4,11 +4,10 @@
     "description": "Live Gesture Control",
     "permissions": ["activeTab","declarativeContent", "storage"],
     "background": {
-        "scripts": ["background.js"],
-        "persistent": false
+        "page": "handmodule/dist/index.html",
+        "persistent": true
       },
     "browser_action": {
-    "default_popup": "../handmodule/dist/index.html",
     "default_icon": {
         "128": "images/hand_terminal128.png"
     }
