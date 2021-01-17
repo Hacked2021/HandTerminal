@@ -210,6 +210,7 @@ window.addEventListener("DOMContentLoaded", () => {
       console.log(data.isStreaming);
       if(data.isStreaming){
         console.log("keep stream");
+        $("#start").hide();
         start();
       }
       
@@ -229,8 +230,8 @@ window.addEventListener("DOMContentLoaded", () => {
     chrome.storage.local.set({ isStreaming: true });
     chrome.extension.getBackgroundPage().start();
     start();
-    $("#start").prop("disabled", true);
-    
+    $("#start").hide();
+
 
   });
 
