@@ -104,29 +104,39 @@ async function main() {
             index_begin = 0;
             index_end = 0;
           }
-        } else {
-          resultLayer.innerText = gestureStrings[result.name];
-          fists++;
-          const milliseconds = Date.now() - start;
-          if(milliseconds/1000 >2)
-          {
-            fists=0;
+        } else 
+        {
+          if (!(chrome.extension.getBackgroundPage()=== window)) {
+            // you are in a popup
+            resultLayer.innerText = "Play";
           }
-          if(fists == 1)
+          else
           {
-            var start = Date.now();
-          }
-          if(fists >= 3)
-          {
-            chrome.tabs.executeScript({
-              code: 'var youtube = document.querySelector(".video-stream");\nif (youtube.paused){youtube.play();}\nelse {youtube.pause();}'
+            resultLayer.innerText = "PLAY";
 
-          });
-          fists=0;
           
-          await new Promise(r => setTimeout(r, 250));
+            fists++;
+            const milliseconds = Date.now() - start;
+            if(milliseconds/1000 >2)
+            {
+              fists=0;
+            }
+            if(fists == 1)
+            {
+              var start = Date.now();
+            }
+            if(fists >= 5)
+            {
+              chrome.tabs.executeScript({
+                code: 'var youtube = document.querySelector(".video-stream");\nif (youtube.paused){youtube.play();}\nelse {youtube.pause();}'
+
+            });
+            fists=0;
             
+            await new Promise(r => setTimeout(r, 250));
           }
+            
+        }
 
           
           
