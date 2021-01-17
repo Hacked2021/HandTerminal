@@ -4,6 +4,8 @@ const config = {
 };
 
 
+
+
 // For better performance
 console.log("Enable CPU forwarding");
 tf.ENV.set("WEBGL_CPU_FORWARD", true);
@@ -202,19 +204,39 @@ function drawPoint(ctx, x, y, r, color) {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
+  
+  chrome.storage.local.get(['isStreaming'], function(data) {
+    try {
+      console.log(data.isStreaming);
+      if(data.isStreaming){
+        console.log("keep stream");
+        start();
+      }
+      
+    } catch (error) {
+      console.log("No data");
+    }
+
+    
+ 
+   });
 
   $("#start").on("click", () => {
+    
     chrome.runtime.onInstalled.addListener(function () {
       chrome.tabs.create({ url: "handmodule/dist/index.html" });
     });
-
+    chrome.storage.local.set({ isStreaming: true });
     chrome.extension.getBackgroundPage().start();
     start();
     $("#start").prop("disabled", true);
+    
 
   });
 
   $("#stop").on("click", () => {
+    chrome.storage.local.set({ isStreaming: false });
     chrome.runtime.reload();
+
   });
 });
