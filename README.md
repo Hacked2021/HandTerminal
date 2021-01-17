@@ -1,7 +1,9 @@
 [![GitHub contributors](https://img.shields.io/github/contributors/Naereen/StrapDown.js.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/contributors/) <br />
 # Hand Terminal
----
-![logo](https://github.com/Hacked2021/HandTerminal/blob/master/Logo/HandTerminal-Logo.png)<br/>
+<p align="center">
+  <img width="460" height="300" src="https://github.com/Hacked2021/HandTerminal/blob/master/Logo/HandTerminal-Logo.png>
+</p>
+
 The future of web based user interactions is now.
 
 
