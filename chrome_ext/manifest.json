@@ -8,7 +8,7 @@
         "persistent": false
       },
     "browser_action": {
-    "default_popup": "handmodule/dist/index_ui.html",
+    "default_popup": "handmodule/dist/index.html",
     "default_icon": {
         "128": "images/hand_terminal128.png"
     }

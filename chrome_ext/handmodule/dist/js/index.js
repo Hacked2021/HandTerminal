@@ -96,11 +96,21 @@ async function main() {
           if (index_end - index_begin < -17) {
             // Point to next
             resultLayer.innerText = gestureStrings[result.name];
+            chrome.tabs.executeScript({
+              code: 'document.querySelector("video").currentTime+=5;'
+
+          });
+          await new Promise(r => setTimeout(r, 1000));
             index_begin = 0;
             index_end = 0;
           } else if (index_end - index_begin > 17) {
             // Point to previous
             resultLayer.innerText = "Prev";
+            chrome.tabs.executeScript({
+              code: 'document.querySelector("video").currentTime-=5;'
+
+          });
+          await new Promise(r => setTimeout(r, 1000));
             index_begin = 0;
             index_end = 0;
           }
@@ -128,7 +138,7 @@ async function main() {
             if(fists >= 5)
             {
               chrome.tabs.executeScript({
-                code: 'var youtube = document.querySelector(".video-stream");\nif (youtube.paused){youtube.play();}\nelse {youtube.pause();}'
+                code: 'var youtube = document.querySelector("video");\nif (youtube.paused){youtube.play();}\nelse {youtube.pause();}'
 
             });
             fists=0;
@@ -137,10 +147,7 @@ async function main() {
           }
             
         }
-
-          
-          
-            
+  
         }
       }
       
