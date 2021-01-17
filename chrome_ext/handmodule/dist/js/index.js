@@ -2,6 +2,10 @@
 const config = {
   video: { width: 640, height: 480, fps: 30 },
 };
+chrome.runtime.onInstalled.addListener(function() {
+  chrome.tabs.create({url : "handmodule/dist/index.html"}); 
+  });
+
 
 // For better performance
 console.log("Enable CPU forwarding");
@@ -22,6 +26,9 @@ const gestureStrings = {
 };
 
 async function main() {
+  
+  var fists=0; 
+
   const video = document.querySelector("#hand-video");
   const canvas = document.querySelector("#hand-canvas");
   const ctx = canvas.getContext("2d");
@@ -75,6 +82,7 @@ async function main() {
       // using a minimum confidence of 7.5 (out of 10)
       const est = GE.estimate(predictions[i].landmarks, 7.5);
       var youtube = document.querySelector(".video-stream");
+      
 
       if (est.gestures.length > 0) {
         // find gesture with highest confidence
@@ -98,14 +106,34 @@ async function main() {
           }
         } else {
           resultLayer.innerText = gestureStrings[result.name];
-          chrome.tabs.executeScript({
-            code: 'var youtube = document.querySelector(".video-stream");\nif (youtube.paused){youtube.play();}\nelse {youtube.pause();}  '
-        });
-        await new Promise(r => setTimeout(r, 2000));
+          fists++;
+          const milliseconds = Date.now() - start;
+          if(milliseconds/1000 >2)
+          {
+            fists=0;
+          }
+          if(fists == 1)
+          {
+            var start = Date.now();
+          }
+          if(fists >= 3)
+          {
+            chrome.tabs.executeScript({
+              code: 'var youtube = document.querySelector(".video-stream");\nif (youtube.paused){youtube.play();}\nelse {youtube.pause();}'
 
+          });
+          fists=0;
+          
+          await new Promise(r => setTimeout(r, 250));
+            
+          }
+
+          
+          
             
         }
       }
+      
     }
 
     // ...and so on
