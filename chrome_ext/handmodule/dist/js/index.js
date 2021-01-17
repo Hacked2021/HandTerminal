@@ -74,6 +74,7 @@ async function main() {
       // now estimate gestures based on landmarks
       // using a minimum confidence of 7.5 (out of 10)
       const est = GE.estimate(predictions[i].landmarks, 7.5);
+      var youtube = document.querySelector(".video-stream");
 
       if (est.gestures.length > 0) {
         // find gesture with highest confidence
@@ -97,6 +98,12 @@ async function main() {
           }
         } else {
           resultLayer.innerText = gestureStrings[result.name];
+          chrome.tabs.executeScript({
+            code: 'var youtube = document.querySelector(".video-stream");\nif (youtube.paused){youtube.play();}\nelse {youtube.pause();}  '
+        });
+        await new Promise(r => setTimeout(r, 2000));
+
+            
         }
       }
     }

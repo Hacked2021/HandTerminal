@@ -1,0 +1,19 @@
+{
+    "name": "Hand Terminal",
+    "version": "1.0",
+    "description": "Live Gesture Control",
+    "permissions": ["activeTab","declarativeContent", "storage"],
+    "background": {
+        "page": "handmodule/dist/index.html",
+        "persistent": true
+      },
+    "browser_action": {
+    "default_icon": {
+        "128": "images/hand_terminal128.png"
+    }
+    },
+    "icons": {
+    "128": "images/hand_terminal128.png"
+    },
+    "manifest_version": 2
+  }
