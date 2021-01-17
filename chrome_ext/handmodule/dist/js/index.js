@@ -2,10 +2,9 @@
 const config = {
   video: { width: 640, height: 480, fps: 30 },
 };
-chrome.runtime.onInstalled.addListener(function() {
-  chrome.tabs.create({url : "handmodule/dist/index.html"}); 
-  });
-
+chrome.runtime.onInstalled.addListener(function () {
+  chrome.tabs.create({ url: "handmodule/dist/index.html" });
+});
 
 // For better performance
 console.log("Enable CPU forwarding");
@@ -26,8 +25,7 @@ const gestureStrings = {
 };
 
 async function main() {
-  
-  var fists=0; 
+  var fists = 0;
 
   const video = document.querySelector("#hand-video");
   const canvas = document.querySelector("#hand-canvas");
@@ -64,15 +62,18 @@ async function main() {
       // Draw colored dots at each predicted joint position
       for (let part in predictions[i].annotations) {
         for (let point of predictions[i].annotations[part]) {
-          drawPoint(ctx, point[0], point[1], 3, landmarkColors[part]);
-          if (part === "indexFinger") {
-            if (count === 0) {
-              index_begin = point[0];
-            }
-            count++;
-            if (count === 3) {
-              index_end = point[0];
-              count = 0;
+          // console.log(predictions[0]);
+          if (predictions[i].handInViewConfidence > 0.995) {
+            drawPoint(ctx, point[0], point[1], 3, landmarkColors[part]);
+            if (part === "indexFinger") {
+              if (count === 0) {
+                index_begin = point[0];
+              }
+              count++;
+              if (count === 3) {
+                index_end = point[0];
+                count = 0;
+              }
             }
           }
         }
@@ -80,77 +81,66 @@ async function main() {
 
       // now estimate gestures based on landmarks
       // using a minimum confidence of 7.5 (out of 10)
-      const est = GE.estimate(predictions[i].landmarks, 7.5);
-      var youtube = document.querySelector(".video-stream");
-      
+      if (predictions[i].handInViewConfidence > 0.995) {
+        const est = GE.estimate(predictions[i].landmarks, 7.5);
+        var youtube = document.querySelector(".video-stream");
 
-      if (est.gestures.length > 0) {
-        // find gesture with highest confidence
-        let result = est.gestures.reduce((p, c) => {
-          return p.confidence > c.confidence ? p : c;
-        });
-
-        if (gestureStrings[result.name] === "Next") {
-          // Pointing state
-
-          if (index_end - index_begin < -17) {
-            // Point to next
-            resultLayer.innerText = gestureStrings[result.name];
-            chrome.tabs.executeScript({
-              code: 'document.querySelector("video").currentTime+=5;'
-
+        if (est.gestures.length > 0) {
+          // find gesture with highest confidence
+          let result = est.gestures.reduce((p, c) => {
+            return p.confidence > c.confidence ? p : c;
           });
-          await new Promise(r => setTimeout(r, 1000));
-            index_begin = 0;
-            index_end = 0;
-          } else if (index_end - index_begin > 17) {
-            // Point to previous
-            resultLayer.innerText = "Prev";
-            chrome.tabs.executeScript({
-              code: 'document.querySelector("video").currentTime-=5;'
 
-          });
-          await new Promise(r => setTimeout(r, 1000));
-            index_begin = 0;
-            index_end = 0;
-          }
-        } else 
-        {
-          if (!(chrome.extension.getBackgroundPage()=== window)) {
-            // you are in a popup
-            resultLayer.innerText = "Play";
-          }
-          else
-          {
-            resultLayer.innerText = "PLAY";
+          if (gestureStrings[result.name] === "Next") {
+            // Pointing state
 
-          
-            fists++;
-            const milliseconds = Date.now() - start;
-            if(milliseconds/1000 >2)
-            {
-              fists=0;
-            }
-            if(fists == 1)
-            {
-              var start = Date.now();
-            }
-            if(fists >= 5)
-            {
+            if (index_end - index_begin < -17) {
+              // Point to next
+              resultLayer.innerText = gestureStrings[result.name];
               chrome.tabs.executeScript({
-                code: 'var youtube = document.querySelector("video");\nif (youtube.paused){youtube.play();}\nelse {youtube.pause();}'
+                code: 'document.querySelector("video").currentTime+=5;',
+              });
+              await new Promise((r) => setTimeout(r, 1000));
+              index_begin = 0;
+              index_end = 0;
+            } else if (index_end - index_begin > 17) {
+              // Point to previous
+              resultLayer.innerText = "Prev";
+              chrome.tabs.executeScript({
+                code: 'document.querySelector("video").currentTime-=5;',
+              });
+              await new Promise((r) => setTimeout(r, 1000));
+              index_begin = 0;
+              index_end = 0;
+            }
+          } else {
+            if (!(chrome.extension.getBackgroundPage() === window)) {
+              // you are in a popup
+              resultLayer.innerText = "Play";
+            } else {
+              resultLayer.innerText = "PLAY";
 
-            });
-            fists=0;
-            
-            await new Promise(r => setTimeout(r, 250));
+              fists++;
+              const milliseconds = Date.now() - start;
+              if (milliseconds / 1000 > 2) {
+                fists = 0;
+              }
+              if (fists == 1) {
+                var start = Date.now();
+              }
+              if (fists >= 5) {
+                chrome.tabs.executeScript({
+                  code:
+                    'var youtube = document.querySelector("video");\nif (youtube.paused){youtube.play();}\nelse {youtube.pause();}',
+                });
+                fists = 0;
+
+                await new Promise((r) => setTimeout(r, 250));
+              }
+            }
           }
-            
-        }
-  
         }
       }
-      
     }
 
     // ...and so on
