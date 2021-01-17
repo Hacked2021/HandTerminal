@@ -4,7 +4,7 @@
 The future of web based user interactions is now.
 
 
-## Why we mad Hand Terminal?
+## Why we made Hand Terminal?
 ---
 Hand Terminal adds a new layer of user experience while watching videos on the web. You can control your video experience by just a motion of your hand in front
 of your web camera. No more getting the keyboard dirty because you were having a pizza 🍕  while watching youtube ;)
