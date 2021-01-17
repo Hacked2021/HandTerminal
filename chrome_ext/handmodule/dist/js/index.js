@@ -2,9 +2,7 @@
 const config = {
   video: { width: 640, height: 480, fps: 30 },
 };
-chrome.runtime.onInstalled.addListener(function () {
-  chrome.tabs.create({ url: "handmodule/dist/index.html" });
-});
+
 
 // For better performance
 console.log("Enable CPU forwarding");
@@ -23,6 +21,23 @@ const gestureStrings = {
   fist: "fist",
   point_right: "Next",
 };
+
+function start() {
+  initCamera(config.video.width, config.video.height, config.video.fps).then(
+    (video) => {
+      video.play();
+      video.addEventListener("loadeddata", (event) => {
+        console.log("Rolling Camera");
+        main();
+      });
+    }
+  );
+
+  const canvas = document.querySelector("#hand-canvas");
+  canvas.width = config.video.width;
+  canvas.height = config.video.height;
+  console.log("Canvas has been initialized");
+}
 
 async function main() {
   var fists = 0;
@@ -187,18 +202,19 @@ function drawPoint(ctx, x, y, r, color) {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-  initCamera(config.video.width, config.video.height, config.video.fps).then(
-    (video) => {
-      video.play();
-      video.addEventListener("loadeddata", (event) => {
-        console.log("Rolling Camera");
-        main();
-      });
-    }
-  );
 
-  const canvas = document.querySelector("#hand-canvas");
-  canvas.width = config.video.width;
-  canvas.height = config.video.height;
-  console.log("Canvas has been initialized");
+  $("#start").on("click", () => {
+    chrome.runtime.onInstalled.addListener(function () {
+      chrome.tabs.create({ url: "handmodule/dist/index.html" });
+    });
+
+    chrome.extension.getBackgroundPage().start();
+    start();
+    $("#start").prop("disabled", true);
+
+  });
+
+  $("#stop").on("click", () => {
+    chrome.runtime.reload();
+  });
 });
