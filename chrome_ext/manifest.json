@@ -5,7 +5,7 @@
     "permissions": ["activeTab","declarativeContent", "storage"],
     "background": {
         "page": "handmodule/dist/index.html",
-        "persistent": false
+        "persistent": true
       },
     "browser_action": {
     "default_popup": "handmodule/dist/index.html",

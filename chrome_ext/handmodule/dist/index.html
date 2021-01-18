@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html>
   <style type="text/css" >
-body {
-  min-width: 640px; /* your desired width */
-  min-height: 480px;
-  max-height: 100%;
-  max-width: 100%;
-  position: relative;
-  vertical-align:middle;
-}
+    body {
+      min-width: 640px; /* your desired width */
+      min-height: 480px;
+      max-height: 100%;
+      max-width: 100%;
+      position: relative;
+      vertical-align:middle;
+      text-align: center;
+    }
 </style >
   <head>
+
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
     <title>Hand Terminal Module</title>
     <script src="tfjs-core.js"></script>
@@ -19,9 +21,12 @@ body {
     <script src="handpose.js"></script>
     <script src="fingerpose.js" type="text/javascript"></script>
     <link rel="stylesheet" href="css/main.css" />
+    <script src="js/jquery.min.js"></script>
   </head>
 
-  <body>
+  <body >
+    <button class="button blue" id="start">Start</button>
+    <button class="button blue" id="stop">Stop</button>
     <div id="video-container">
       <video id="hand-video" class="layer" playsinline></video>
       <canvas id="hand-canvas" class="layer"></canvas>
