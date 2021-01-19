@@ -1,4 +1,5 @@
-[![GitHub contributors](https://img.shields.io/github/contributors/Naereen/StrapDown.js.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/contributors/) <br />
+[![GitHub contributors](https://img.shields.io/github/contributors/Naereen/StrapDown.js.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/contributors/)
+![CodeQL](https://github.com/OpenML2021/HandTerminal/workflows/CodeQL/badge.svg)<br />
 # Hand Terminal
 ![logo](https://github.com/Hacked2021/HandTerminal/blob/master/Logo/HandTerminal-Logo.png)<br />
 
