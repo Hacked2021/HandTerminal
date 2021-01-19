@@ -1,4 +1,14 @@
 /* Acknowledgement: git+https://github.com/andypotato/fingerpose.git */
+chrome.runtime.onInstalled.addListener(function(details) {
+  // console.log(details.reason); -- debug
+  if(details.reason === "install"){
+
+    chrome.tabs.create({ url: "handmodule/dist/index.html" });
+    
+  }
+  
+});
+
 const config = {
   video: { width: 640, height: 480, fps: 30 },
 };
@@ -204,6 +214,7 @@ function drawPoint(ctx, x, y, r, color) {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
+
   
   chrome.storage.local.get(['isStreaming'], function(data) {
     try {
@@ -223,10 +234,8 @@ window.addEventListener("DOMContentLoaded", () => {
    });
 
   $("#start").on("click", () => {
-    
-    chrome.runtime.onInstalled.addListener(function () {
-      chrome.tabs.create({ url: "handmodule/dist/index.html" });
-    });
+        
+
     chrome.storage.local.set({ isStreaming: true });
     chrome.extension.getBackgroundPage().start();
     start();
